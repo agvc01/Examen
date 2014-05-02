@@ -1,0 +1,42 @@
+﻿PARA EL EXAMEN DE SOPORTE AVANZADO ASL
+
+1- Actualizar sistema:
+
+	apt-get update
+
+	apt-get upgrade
+
+
+2- Instalar paquetes necesarios
+
+GIT y GITCORE
+
+	apt-get install libcurl4-gnutls.dev libexpat1-dev gettext /libz-dev
+
+	apt-get install git
+
+	apt-get install git-core
+
+	Dirección de mi repositorio (https://github.com/agvc01/Examen.git)
+
+SSH Y APACHE
+
+	apt-get install ssh
+
+	apt-get install apache2 -y (reiniciar apache: sudo /etc/init.d/apache2 restart)
+
+REPREPRO Y OPENSSL
+
+	apt-get install reprepro o (aptitude install reprepro devscripts apache2)
+
+	apt-get install openssl
+
+MIRROR
+
+	apt-get install apt-mirror
+
+GEDIT
+
+	apt-get install gedit
+
+

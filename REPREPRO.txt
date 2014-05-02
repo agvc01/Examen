@@ -1,0 +1,88 @@
+﻿Primeramente necesitas instalar algunas aplicaciones. En una terminal de root (Aplicaciones > Accesorios > Terminal de Root) escribe el siguiente comando:
+aptitude install reprepro pinentry-qt devscripts apache2
+Una vez instaladas, en la misma terminal de root coloca el siguiente comando para crear el esqueleto del repositorio:
+mkdir -p /var/www/repositorio/conf
+Accede a la carpeta que acabas de crear y abre un archivo nuevo de nombre "distributions" con tu editor de texto favorito. Yo usaré vim.
+cd /var/www/repositorio/conf
+vim distributions
+Acá vas a llenar el archivo con los siguientes datos:
+Origin: Nombre de la distribución o sabor. Sólo usar caracteres alfanuméricos y guiones, nada de espacios o caracteres especiales (p. ej.: Canaima).
+Label: Etiqueta de la distribución o sabor. Generalmente se utiliza el mismo valor de Origin.
+Codename: Nombre código de la distribución o sabor (p. ej: aponwao, roraima,auyantepui).
+Suite: Nombre del estado de desarrollo de la distribución (p. ej: estable, pruebas, desarrollo).
+Version: Versión de la distribución o sabor.
+Pull: Distribución desde donde se actualizan los paquetes.
+Description: Descripción de la distribución.
+Architectures: Arquitecturas soportadas por la distribución o sabor.
+Components: Componentes o secciones en las que se divide el repositorio (p. ej:main, contrib, non-free).
+SignWith: Código de la Llave pública GPG o correo asociado con que se firma el repositorio.
+DebIndices: Tipos de Índices a generar.
+Debes agregar un bloque de éstos por cada estado de desarrollo de la distribución. Por ejemplo, el archivo conf/distributions del repositorio de Canaima para 3.0 es el siguiente:
+Origin: Canaima
+Label: Canaima
+Suite: antiguo
+Codename: aponwao
+Version: 2.1
+Pull: estable
+Architectures: i386 amd64 source
+Components: usuarios
+Description: Canaima GNU/Linux
+SignWith: repositorios@canaima.softwarelibre.gob.ve
+DebIndices: Packages Release . .gz .bz2
+
+Origin: Canaima
+Label: Canaima
+Suite: estable
+Codename: roraima
+Version: 3.0
+Pull: pruebas
+Architectures: i386 amd64 source
+Components: usuarios
+Description: Canaima GNU/Linux
+SignWith: repositorios@canaima.softwarelibre.gob.ve
+DebIndices: Packages Release . .gz .bz2
+
+Origin: Canaima
+Label: Canaima
+Suite: desarrollo
+Codename: auyantepui
+Version: 3.1
+Architectures: i386 amd64 source
+Components: usuarios
+Description: Canaima GNU/Linux
+SignWith: repositorios@canaima.softwarelibre.gob.ve
+DebIndices: Packages Release . .gz .bz2
+Cuando hayas armado el archivo conf/distributions, colocate en el directorio /var/www/repositorio:
+cd /var/www/repositorio
+Y ejecuta el siguiente comando para terminar de crear el esqueleto del repositorio:
+reprepro -VVV export
+Luego el siguiente comando creará los enlaces simbólicos Codename > Suite:
+reprepro -VVV createsymlinks
+Listo, tu repositorio se encuentra listo para que puedas agregarle paquetes.
+Agregando paquetes binarios y fuentes
+Para agregar paquetes binarios (.deb) debes ubicarte en la carpeta raíz del repositorio (en nuestro ejemplo /var/www/repositorio) y ejecutar el siguiente comando:
+reprepro includedeb [DISTRIBUCIÓN] [PAQUETE]
+En donde [DISTRIBUCIÓN] será la rama de desarrollo donde se desea incluir y [PAQUETE] la ruta completa a donde se encuentra el paquete .deb dentro de la computadora. Por ejemplo:
+reprepro includedeb auyantepui /home/huntingbears/canaima-desarrollador_3.0-1_all.deb
+Para el caso de los paquetes fuente, el comando es el siguiente:
+reprepro include [DISTRIBUCIÓN] [CHANGES]
+En donde [DISTRIBUCIÓN] será la rama de desarrollo donde se desea incluir y [CHANGES] la ruta completa a donde se encuentra el archivo .changes producto del empaquetamiento (deben estar también en la misma carpeta el resto de los archivos que forman parte de los paquetes fuentes: dsc, .orig.tar.gz, .debian.tar.gz, más el paquete binario .deb). Por ejemplo:
+reprepro include auyantepui /home/huntingbears/canaima-desarrollador_3.0-1_all.changes
+Eliminando paquetes
+Eliminar un paquete de una rama es bastante sencillo:
+reprepro remove [DISTRIBUCIÓN] [PAQUETE]
+En donde [DISTRIBUCIÓN] es la rama de desarrollo de donde se desea remover el paquete y [PAQUETE] el nombre (sólo el nombre) del paquete que se desea remover. Por ejemplo:
+reprepro remove auyantepui canaima-desarrollador
+Usando el repositorio
+Puedes probar los paquetes binarios del repositorio colocando ésta linea en tu archivo /etc/apt/sources.list:
+deb http://localhost/repositorio [DISTRIBUCIÓN] [COMPONENTES]
+En donde [DISTRIBUCIÓN] es la rama de desarrollo donde se encuentran los paquetes que deseas probar y [COMPONENTES] los componentes que creaste para tu distribución en el archivo conf/distributions. Por ejemplo:
+deb http://localhost/repositorio auyantepui usuarios
+También puedes probar los paquetes fuentes del repositorio si agregas la siguiente línea igualmente en tu archivo /etc/apt/sources.list:
+deb-src http://localhost/repositorio [DISTRIBUCIÓN] [COMPONENTES]
+Si posees una IP fija o un nombre de dominio asignado a tu computadora o servidor, puedes publicarlo a las demás personas pidiéndoles que agreguen la línea en sus archivos /etc/apt/sources.list:
+deb http://TU-DIRECCIÓN-IP/repositorio [DISTRIBUCIÓN] [COMPONENTES]
+ó
+deb http://TU-DOMINIO/repositorio [DISTRIBUCIÓN] [COMPONENTES]
+Saludos a todos, espero les sea de utilidad.
+

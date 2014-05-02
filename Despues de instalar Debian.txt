@@ -1,0 +1,57 @@
+﻿Si nos paseamos por la red veríamos bastantes artículos,sobre que hacer después de instalar Ubuntu de una manera sorprendente, pero yo he querido colocar mi grano de arena para Debian que no quiere decir que no los haya sobre todo foros,blog y wikis, pero intentaré colocar mi granito de arena de la manera mas fácil. 
+En estos momentos Debian es testing (squeeze) con kernel Linux, pero a finales de año sera estable,este pequeño tutorial es para dejarlo siempre en testing (gnome)de manera que no estaremos pasando de una distribución a otra . 
+
+Cambiar repositorios 
+La segunda cosa que hago es cambiar los repositorios por estos ,es decir: 
+Abrimos la terminal: su + contraseña 
+y nos aseguramos que tengamos el editor gedit instalado con: 
+#apt-get install gedit
+
+Ahora editamos el sources.list con: 
+#gedit /etc/apt/sources.list
+
+La que tengaís dentro la borras (incluido el del cd o los cometáis) y colocamos las non-free : 
+
+deb http://ftp.de.debian.org/debian/ testing main contrib non-free 
+deb-src http://ftp.de.debian.org/debian/ testing main contrib non-free 
+
+deb http://security.debian.org/ testing/updates main contrib non-free 
+deb-src http://security.debian.org/ testing/updates main contrib non-free 
+
+deb http://www.debian-multimedia.org testing main non-free 
+
+deb http://security.debian.org/ squeeze/updates contrib non-free main 
+deb-src http://security.debian.org/ squeeze/updates contrib non-free main 
+Guardamos gedit y cerramos,actualizamos repositorios y sistema. 
+Nos dará error de llave en el repositorio de Multimedia,no os preocupéis luego le metemos mano. 
+
+Actualizar repositorios y distribución con: 
+#aptitude update && aptitude full-upgrade
+
+
+Siguiente paso vamos a instalar el gestor de paquetes “ synaptic “ y la llave de multimedia (es un repositorio estilo mediubuntu) 
+#apt-get install debian-multimedia-keyring synaptic
+
+
+
+
+Instalar codecs y demás parafernalia en 64 bits (para 32 bits cambiar w64codecs por w32codecs) 
+
+ 
+#apt-get install gstreamer0.10-alsa gstreamer0.10-ffmpeg gstreamer0.10-fluendo-mp3 gstreamer0.10-fluendo-mpegdemux gstreamer0.10-fluendo-mpegmux gstreamer0.10-gnonlin gstreamer0.10-lame gstreamer0.10-plugins-bad gstreamer0.10-plugins-base gstreamer0.10-plugins-base-apps gstreamer0.10-plugins-farsight gstreamer0.10-plugins-good gstreamer0.10-plugins-ugly gstreamer0.10-schroedinger gstreamer0.10-sdl gstreamer0.10-tools gstreamer0.10-x gstreamer-tools ffmpeg avifile-divx-plugin avifile-mad-plugin avifile-mjpeg-plugin avifile-vorbis-plugin avifile-xvid-plugin libquicktime1 quicktime-utils libxine1 sox mjpegtools w64codecs libdvdcss2 vorbis-tools wavpack synaptic
+
+
+
+Instalar Java 
+ 
+#apt-get install sun-java6-plugin sun-java6-jdk sun-java6-jre
+
+
+Instalar Flashs 
+Para esto nos leemos este articulo ,es para 64 bits pero en los enlaces puedes bajarte para 32 bits. 
+
+Con esto tendréis un Debian funcional,solo quedará instalar las aplicaciones que mas os gusta ,por la terminal o synaptic,si lo se hay aplicaciones en el escritorio gnome que faltan para su solución abrimos “ synaptic “ y buscamos gnome, nautilus e instalamos la que mas nos convengan. 
+Descargar CDs CDs Debian (1° cd instalacion- el resto aplicaciones) 
+Descargar DVDs DVDs Debian (1° dvd de instalacion - el resto aplicaciones) 
+
+Fuente: http://putodeb.com
